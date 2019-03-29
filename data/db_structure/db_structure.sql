@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: database
--- Generation Time: Mar 28, 2019 at 02:01 PM
+-- Generation Time: Mar 29, 2019 at 03:32 PM
 -- Server version: 5.7.25
 -- PHP Version: 7.2.14
 
@@ -34,8 +34,8 @@ CREATE TABLE `patients` (
   `last_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_of_birth` date NOT NULL,
   `age` tinyint(6) NOT NULL,
-  `datetime_of_admission` datetime NOT NULL,
-  `datetime_of_discharge` datetime DEFAULT NULL,
+  `datetime_admission` datetime NOT NULL,
+  `datetime_discharge` datetime DEFAULT NULL,
   `bed` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -84,8 +84,8 @@ INSERT INTO `signals` (`id`, `name`, `population_mean`, `population_std`) VALUES
 --
 ALTER TABLE `patients`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `datetime_of_admission` (`datetime_of_admission`),
-  ADD KEY `datetime_of_discharge` (`datetime_of_discharge`);
+  ADD KEY `datetime_of_admission` (`datetime_admission`),
+  ADD KEY `datetime_of_discharge` (`datetime_discharge`);
 
 --
 -- Indexes for table `patient_signal_values`
@@ -111,6 +111,12 @@ ALTER TABLE `signals`
 -- AUTO_INCREMENT for table `patients`
 --
 ALTER TABLE `patients`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `patient_signal_values`
+--
+ALTER TABLE `patient_signal_values`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

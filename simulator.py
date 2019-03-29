@@ -5,7 +5,7 @@ from faker import Faker
 from sys import exit
 from datetime import datetime, timedelta
 from time import sleep
-from config import MYSQL_CONFIG
+from src.config import MYSQL_CONFIG
 import MySQLdb
 import logging
 import coloredlogs

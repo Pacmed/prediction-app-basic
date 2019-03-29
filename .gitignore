@@ -104,5 +104,5 @@ venv.bak/
 .mypy_cache/
 
 # Don't commit the contents of the MySQL database
-db_data/*
+/data/db_data/*
 !db_data/.gitkeep
