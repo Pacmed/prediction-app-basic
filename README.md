@@ -38,4 +38,6 @@ This tool is optimised for educational purposes, do **not** use this in producti
 - Make sure docker-compose is available by running `docker-compose -v`
 - Run `docker-compose up -d` from the root of this repository
 - Make sure that four containers are running with `docker ps`
-- Check whether the API is running by visiting ```localhost/get_patients_in_ic``` in the browser
+- Check whether required services are accessible in the browser:
+  - API: ```localhost/get_patients_in_ic```
+  - Database Manager: ```localhost:8080``` with credentials *icu_username/icu_password*
