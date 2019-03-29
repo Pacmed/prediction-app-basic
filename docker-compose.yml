@@ -1,0 +1,61 @@
+version: "3.4"
+services:
+
+  api:
+    container_name: api
+    build:
+      context: ./
+      dockerfile: Dockerfile.api
+    ports:
+      - 80:80
+    volumes:
+      - ./:/www/
+    environment:
+      MYSQL_HOSTNAME: database
+      MYSQL_USERNAME: icu_username
+      MYSQL_PASSWORD: icu_password
+      MYSQL_DATABASE: icu_database
+    depends_on:
+      - database
+
+  simulator:
+    container_name: simulator
+    build:
+      context: ./
+      dockerfile: Dockerfile.simulator
+    volumes:
+      - ./:/www/
+    environment:
+      MYSQL_HOSTNAME: database
+      MYSQL_USERNAME: icu_username
+      MYSQL_PASSWORD: icu_password
+      MYSQL_DATABASE: icu_database
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    image: mysql:5.7.25
+    environment:
+      MYSQL_USER: icu_username
+      MYSQL_PASSWORD: icu_password
+      MYSQL_ROOT_PASSWORD: icu_rootpass
+      MYSQL_DATABASE: icu_database
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+    volumes:
+      - ./data/db_structure:/docker-entrypoint-initdb.d
+      - ./data/db_data:/var/lib/mysql
+
+  # Interface for our own MySQL database
+  phpmyadmin:
+    container_name: icu_phpmyadmin
+    image: phpmyadmin/phpmyadmin:4.8.5
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: database
+      MYSQL_USER: icu_username
+      MYSQL_PASSWORD: icu_password
