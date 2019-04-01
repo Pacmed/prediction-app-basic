@@ -39,5 +39,7 @@ This tool is optimised for educational purposes, do **not** use this in producti
 - Run `docker-compose up -d` from the root of this repository
 - Make sure that four containers are running with `docker ps`
 - Check whether required services are accessible in the browser:
-  - API: ```localhost/get_patients_in_ic```
-  - Database Manager: ```localhost:8080``` with credentials *icu_username/icu_password*
+  1. API:
+     - `localhost/get_patients_in_ic`
+     - `localhost/get_prediction_for_single_patient/{patient_id}`. Replace `{patient_id}` with a patient id to be found in the response of the first call.
+  2. Database Manager: ```localhost:8080``` with credentials *icu_username/icu_password*
