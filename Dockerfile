@@ -7,7 +7,7 @@ WORKDIR /www
 COPY . /www
 
 # Upgrade pip and install the required packages
-RUN pip install --upgrade pip
+RUN pip install pip==19.0.3
 RUN pip install -e .
 
-CMD ["python", "simulator.py"]
+CMD ["python", "src/api.py"]

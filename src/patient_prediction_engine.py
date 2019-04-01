@@ -52,7 +52,7 @@ class PatientPredictionEngine:
         return pd.DataFrame(data)
 
     def get_features(self, df_records):
-        """Get features.
+        """Get features (do feature engineering).
 
         Parameters
         ----------
@@ -101,6 +101,7 @@ class PatientPredictionEngine:
         assert 'respiration_rate__mean' in features, "'respirate rate' feature is missing."
         assert 'temperature__std' in features, "'temperate' feature is missing."
 
+        # This is the model (in practice this will probably be a .pickle file)
         x_beta = CONSTANT + \
             COEFF_AGE * features['age'] + \
             COEFF_BLOOD_PRESSURE_LAST * features['blood_pressure__last'] + \
@@ -112,10 +113,13 @@ class PatientPredictionEngine:
     def get_prediction(self):
         """Get a prediction for the patient."""
 
+        # Extract raw data from the database
         df_records = self.get_df_records()
 
+        # Do feature engineering
         features = self.get_features(df_records)
 
+        # Make a prediction
         prediction = self.predict(features)
 
         return prediction

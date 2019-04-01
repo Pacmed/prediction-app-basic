@@ -12,10 +12,10 @@ This tool is optimised for educational purposes, do **not** use this in producti
 │   └── db_structure   <- Contains a .sql file with the structure for the database
 │
 ├── docker-compose.yml <- The docker-compose file for this project
-├── Dockerfile.api     <- Dockerfile for the API
-├── Dockerfile.simulator <- Dockerfile for the simulator
+├── Dockerfile         <- Dockerfile for the API and the simulator
 ├── requirements.txt   <- Lists all packages required to run this software
 ├── setup.cfg          <- Contains configuration for pycodestyle and pydocstyle
+├── setup.py           <- Makes this package installable
 ├── simulator.py       <- Simulator script that simulates daily life at the IC
 ├── src                <- Source code for use in this project.
 │   ├── __init__.py    <- Makes src a Python module

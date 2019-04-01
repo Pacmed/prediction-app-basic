@@ -1,11 +1,18 @@
+# -*- encoding: utf-8 -*-
+"""ICU Prediction API: Simulator.
+
+Author: Bas Vonk
+Date: 2019-04-01
+"""
+
 from random import random, choice, randrange
-from numpy.random import normal
-from faker import Faker
 from datetime import datetime, timedelta
 from time import sleep
-from src.mysql_adapter import MySQL
 import logging
+from numpy.random import normal
+from faker import Faker
 import coloredlogs
+from src.mysql_adapter import MySQL
 
 SECONDS_IN_MINUTE = 60
 MINUTES_IN_DAY = 1440
@@ -28,8 +35,8 @@ DATETIME_START = "2019-01-01 00:00:00"
 MIN_AGE = 10
 MAX_AGE = 100
 
-# a day takes 1440 iterations/minutes. For a fake day to last 5 minutes, we need to sleep
-# 1 / 24 seconds for each minute
+# A day takes 1440 (24 * 60) iterations/minutes. For a fake day to last 5 minutes, we need to sleep
+# 1 / 24 seconds for each iteration/minute
 SLOW_FACTOR = 1 / 24
 
 AVAILABLE_BEDS = ['BED_01', 'BED_02', 'BED_03', 'BED_04', 'BED_05', 'BED_06', 'BED_07', 'BED_08',
@@ -37,31 +44,28 @@ AVAILABLE_BEDS = ['BED_01', 'BED_02', 'BED_03', 'BED_04', 'BED_05', 'BED_06', 'B
                   'BED_17', 'BED_18', 'BED_19', 'BED_20', 'BED_21', 'BED_22', 'BED_23', 'BED_24']
 IC_AVERAGE_PATIENT_AMOUNT = int(len(AVAILABLE_BEDS) / 2)
 
+# Define a logger
 LOGGER = logging.getLogger('Simulator')
 coloredlogs.install(logger=LOGGER)
 
 
 class Simulator:
-    """Class to simulate daily life at the Intensive Care Unit .
+    """Class to simulate daily life at the Intensive Care.
 
     Attributes
     ----------
-    mysql_connection : mysql connection
-        Description of attribute `mysql_connection`.
-    mysql_cursor : mysql cursor
-        Description of attribute `mysql_cursor`.
-    faker_obj : an instance of the Faker class
-        Description of attribute `faker_obj`.
-    current_datetime : type
-        Description of attribute `current_datetime`.
-    available_beds : type
-        Description of attribute `available_beds`.
-    patients_in_ic : type
-        Description of attribute `patients_in_ic`.
-    signals : type
-        Description of attribute `signals`.
-    get_signals : type
-        Description of attribute `get_signals`.
+    mysql_obj : MySQL
+        An instance of the MySQL class
+    faker_obj : Faker
+        An instance of the Faker class.
+    current_datetime : datetime
+        The current datetime (in the simulation, not the actual datetime)
+    available_beds : List[str]
+        Object that lists all available beds
+    patients_in_ic : List[Dict[str, Union[str, datetime, int]]]
+        List with patients that are currently in the IC
+    signals : List[Dict[str, Union[str, datetime, int]]]
+        List with all signals that are available for this simulation
 
     """
 
@@ -83,17 +87,23 @@ class Simulator:
     def reset_simulation(self):
         """Reset the simulation."""
 
-        # Clean the database
+        # Clean the database from previous simulations
         self.mysql_obj.execute_query("DELETE FROM patients")
         self.mysql_obj.execute_query("DELETE FROM patient_signal_values")
 
     def possibly_admit_patient(self, always_admit=False):
         """Admit a fake patient."""
 
+        # General strategy:
+        # 1. Decide whether to admit a fake patient, based on chance and whether there are free beds
+        # 2. Assign a bed (and remove it from the 'free beds' list)
+        # 3. Build a fake patient object
+        # 4. Add the fake patient to the database and to the patients_in_ic object
+
         if (self.decision(FREQ_ADMISSION) and self.available_beds) or always_admit:
 
             # Get a bed from the available bed list while at the same time removing it from that
-            # list
+            # list (a bed can only be assigned once)
             bed = self.available_beds.pop(randrange(len(self.available_beds)))
 
             # Construct a fake patient
@@ -113,7 +123,20 @@ class Simulator:
     def possibly_discharge_patient(self):
         """Discharge a random patient."""
 
-        # If the IC is already empty, discharge nobody
+        # General strategy:
+        # 1. Decide whether to admit a fake patient, based on chance:
+        #    This is built in a way that the chance of discharge is actually influenced by
+        #    the average amount of patients that can be in the IC. On average we discharge 2
+        #    patients per day (same as the amount of patients admitted), but we increase the
+        #    chance of discharge when there's many patients in the IC and decrease the change when
+        #    there's little patients in the IC. The purpose is to always keep around 12 patients
+        #    at the IC.
+        # 2. Pick a random patient currently at the IC
+        # 3. Set the discharge time (this is the 'current' time)
+        # 4. Update the patient in the database
+        # 5. Remove the patient from the list with patients currently in the IC
+        # 6. Make the bed the patient was in available again
+        #
         if self.decision(FREQ_DISCHARGE * len(self.patients_in_ic) / IC_AVERAGE_PATIENT_AMOUNT):
 
             # Sometimes pick the patient longest in the IC, sometimes pick a random patient
@@ -134,6 +157,13 @@ class Simulator:
     def simulate_values_for_patients_in_ic(self):
         """Simulate values for patients that are currently in the IC."""
 
+        # General strategy:
+        # 1. Loop over all patients
+        #    1.1 Loop over all signals that are in the simulation
+        #        1.1.1 For each signal build the row-object
+        #              The value is drawn from a normal distribution with population meand and std
+        #        1.1.2 Replace the row into the database
+
         for patient in self.patients_in_ic:
 
             for signal in self.signals:
@@ -152,7 +182,6 @@ class Simulator:
     def next_minute(self):
         """Increase the current datetime with one minute."""
 
-        # Increase to the next minute
         self.current_datetime = self.current_datetime + timedelta(seconds=SECONDS_IN_MINUTE)
         LOGGER.info(f"Current time: {self.current_datetime}")
 
@@ -177,29 +206,35 @@ class Simulator:
 def run_simulation():
     """Run the simulation."""
 
+    # General strategy:
+    # 1. Initialize the Simulator class
+    # 2. Reset the simulation (remove all patients and values)
+    # 3. Initially admit a certain amount of patients
+    # 4. Start simulating minutes, for each minute:
+    #    4.1 Possibly discharge a patient (on average 2 per day)
+    #    4.2 Simulate values for the patients that are still in the IC
+    #    4.3 Possibly admit a patient (on average 2 per day)
+    #    4.4 Go to the next minute
+    #    4.5 Sleep a while to control the speed of the simulation
+
     simulator_obj = Simulator()
 
     simulator_obj.reset_simulation()
 
     # Admit initial patients
-    for i in range(IC_AVERAGE_PATIENT_AMOUNT):
+    for _ in range(IC_AVERAGE_PATIENT_AMOUNT):
         simulator_obj.possibly_admit_patient(always_admit=True)
 
     while True:
 
-        # Take a decision about discharge
         simulator_obj.possibly_discharge_patient()
 
-        # Simulate values for all patients currently in the IC
         simulator_obj.simulate_values_for_patients_in_ic()
 
-        # Take a decision about admission
         simulator_obj.possibly_admit_patient()
 
-        # Move the to the next minute
         simulator_obj.next_minute()
 
-        # Sleep for a given amount of time
         sleep(SLOW_FACTOR)
 
 
