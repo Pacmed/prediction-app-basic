@@ -6,8 +6,15 @@ Date: 2019-04-01
 """
 
 import MySQLdb
-from config import MYSQL_CONFIG
+from src.config import MYSQL_CONFIG
+from time import sleep
+import logging
+import coloredlogs
 
+MAX_RETRIES = 10
+
+LOGGER = logging.getLogger('MySQL adapter')
+coloredlogs.install(logger=LOGGER)
 
 class MySQL:
     """MysQL adapter.
@@ -22,8 +29,18 @@ class MySQL:
 
     def __init__(self):
 
-        self.connection = MySQLdb.connect(**MYSQL_CONFIG)
-        self.cursor = self.connection.cursor()
+        for i in range(MAX_RETRIES):
+            try:
+                self.connection = MySQLdb.connect(**MYSQL_CONFIG)
+                self.cursor = self.connection.cursor()
+                LOGGER.info(f"Connection succeeded.")
+                break
+            except MySQLdb.Error:
+                retry_interval = 2**i
+                LOGGER.info(f"Connection failed, retrying in: {retry_interval} seconds.")
+                sleep(retry_interval)
+        else:
+            raise SystemError
 
     def execute_query(self, query, params=None):
         """Execute a query and put the results on the cursor.
@@ -104,6 +121,24 @@ class MySQL:
         self.execute_query(query, params)
         result = self.cursor.fetchone()
         return list(result.values())[0]
+
+    def replace_into(self, table_name, values):
+        """Replace a row into a specific database table."""
+
+        # This is safe: https://stackoverflow.com/questions/835092/
+        # python-dictionary-are-keys-and-values-always-the-same-order
+        column_names = list(values.keys())
+        values = list(values.values())
+
+        # Dynamically build the query
+        # Be aware that the %s is NOT string formatting but parameter binding
+        query = 'REPLACE INTO ' + table_name + ' (' + ', '.join(column_names) + \
+                ') VALUES (' + ', '.join(['%s'] * len(column_names)) + ')'
+
+        # Execute the query and commit the results
+        self.execute_query(query, tuple(values))
+
+        return self.cursor.lastrowid
 
     def close_connection(self):
         """Close the database connection."""

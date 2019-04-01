@@ -41,10 +41,6 @@ services:
       MYSQL_PASSWORD: icu_password
       MYSQL_ROOT_PASSWORD: icu_rootpass
       MYSQL_DATABASE: icu_database
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 10s
-      retries: 10
     volumes:
       - ./data/db_structure:/docker-entrypoint-initdb.d
       - ./data/db_data:/var/lib/mysql

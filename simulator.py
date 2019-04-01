@@ -1,12 +1,9 @@
-from random import random, choice, randint, uniform, randrange
+from random import random, choice, randrange
 from numpy.random import normal
-from pprint import pprint
 from faker import Faker
-from sys import exit
 from datetime import datetime, timedelta
 from time import sleep
-from src.config import MYSQL_CONFIG
-import MySQLdb
+from src.mysql_adapter import MySQL
 import logging
 import coloredlogs
 
@@ -71,8 +68,7 @@ class Simulator:
     def __init__(self):
 
         # Create necessary connections and objects
-        self.mysql_connection = MySQLdb.connect(**MYSQL_CONFIG)
-        self.mysql_cursor = self.mysql_connection.cursor()
+        self.mysql_obj = MySQL()
         self.faker_obj = Faker('nl_NL')
         self.current_datetime = datetime.strptime(DATETIME_START, DATETIME_FORMAT)
         self.available_beds = AVAILABLE_BEDS
@@ -82,34 +78,14 @@ class Simulator:
     def get_signals(self):
         """Get all the signals from the database."""
 
-        self.mysql_cursor.execute("SELECT * FROM signals")
-        return list(self.mysql_cursor.fetchall())
+        return self.mysql_obj.fetch_rows("SELECT * FROM signals")
 
     def reset_simulation(self):
         """Reset the simulation."""
 
         # Clean the database
-        self.mysql_cursor.execute("DELETE FROM patients")
-        self.mysql_cursor.execute("DELETE FROM patient_signal_values")
-        self.mysql_connection.commit()
-
-    def replace_into_database(self, table_name, values):
-        """Replace a row into a specific database table."""
-
-        # This is safe: https://stackoverflow.com/questions/835092/python-dictionary-are-keys-and-values-always-the-same-order  # noqa
-        column_names = list(values.keys())
-        values = list(values.values())
-
-        # Dynamically build the query
-        # Be aware that the %s is NOT string formatting but parameter binding
-        query = 'REPLACE INTO ' + table_name + ' (' + ', '.join(column_names) + \
-                ') VALUES (' + ', '.join(['%s'] * len(column_names)) + ')'
-
-        # Execute the query and commit the results
-        self.mysql_cursor.execute(query, tuple(values))
-        self.mysql_connection.commit()
-
-        return self.mysql_cursor.lastrowid
+        self.mysql_obj.execute_query("DELETE FROM patients")
+        self.mysql_obj.execute_query("DELETE FROM patient_signal_values")
 
     def possibly_admit_patient(self, always_admit=False):
         """Admit a fake patient."""
@@ -130,7 +106,7 @@ class Simulator:
                 "bed": bed
             }
 
-            patient['id'] = self.replace_into_database(table_name='patients', values=patient)
+            patient['id'] = self.mysql_obj.replace_into(table_name='patients', values=patient)
             self.patients_in_ic.append(patient)
             LOGGER.info(f"Patient admitted to the IC in bed: {bed}.")
 
@@ -150,7 +126,7 @@ class Simulator:
             # Update the patient and
             # 1. Remove the patient from the IC
             # 2. Return the bed to the available beds
-            self.replace_into_database(table_name='patients', values=patient)
+            self.mysql_obj.replace_into(table_name='patients', values=patient)
             self.patients_in_ic.remove(patient)
             self.available_beds.append(patient['bed'])
             LOGGER.info("Patient discharged from the IC.")
@@ -171,7 +147,7 @@ class Simulator:
                         'value': normal(signal['population_mean'], signal['population_std'])
                     }
 
-                    self.replace_into_database(table_name='patient_signal_values', values=row)
+                    self.mysql_obj.replace_into(table_name='patient_signal_values', values=row)
 
     def next_minute(self):
         """Increase the current datetime with one minute."""

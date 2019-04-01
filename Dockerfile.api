@@ -1,12 +1,13 @@
 FROM python:3.7
 
 SHELL ["/bin/bash", "-c"]
+WORKDIR /www
 
 # Copy the complete repository to the /www folder
 COPY . /www
 
 # Upgrade pip and install the required packages
 RUN pip install --upgrade pip
-RUN pip install -r /www/requirements.txt
+RUN pip install -e .
 
-CMD ["python", "/www/src/api.py"]
+CMD ["python", "src/api.py"]

@@ -6,8 +6,8 @@ Date: 2019-04-01
 """
 
 from flask import Flask, jsonify, request, g
-from patient_prediction_engine import PatientPredictionEngine
-from icu_model import ICUModel
+from src.patient_prediction_engine import PatientPredictionEngine
+from src.icu_model import ICUModel
 
 # Initialize the app and define the folder with the builds and static files
 app = Flask(__name__)
