@@ -10,19 +10,19 @@
 #### Play around with the API endpoints
 3. Add another API endpoint `/healtcheck` (\*\*).
   - Returns plain text `I'm healthy!` when called.
-  - Check whether it works
+  - Check whether it works by visiting the endpoint in the browser.
 
 
 4. Return empty JSON on `/get_prediction_for_single_patient` when the patient left the IC (\*\*).
   - Only modify *api.py*.
   - (TIP: use the `datetime_discharge` attribute of a patient)
-  - Verify your work
+  - Verify your work.
 
 
 5. Add the length of stay in hours to the `/get_prediction_for_single_patient` endpoint (\*\*).
   - Only modify *api.py*.
   - (TIP: `g.current_datetime` is available in all API endpoints.)
-  - Verify your work
+  - Verify your work.
 
 
 6. Add another API endpoint `/get_predictions_for_all_patients` (\*\*\*).
