@@ -20,7 +20,7 @@ class ICUModel:
 
     def __init__(self):
 
-        self.mysql_obj: MySQL = MySQL()
+        self.mysql_obj = MySQL()
 
     def __del__(self):
         """When an instance of this class is deleted, close the database connection."""

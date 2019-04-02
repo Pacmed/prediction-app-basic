@@ -7,6 +7,7 @@ This tool is optimised for educational purposes, do **not** use this in producti
 ```
 ├── LICENSE
 ├── README.md          <- The top-level README for developers using this project
+├── EXERCISES.md       <- Contains the exercises for this case
 ├── data
 │   ├── db_data        <- Empty folder. MySQL docker container persists storage here
 │   └── db_structure   <- Contains a .sql file with the structure for the database
@@ -23,7 +24,7 @@ This tool is optimised for educational purposes, do **not** use this in producti
 │   ├── config.py      <- Script with configuration
 │   ├── icu_model.py   <- Script with a data-layer for the ICU
 │   ├── mysql_adapter.py <- code with an adapter for the Python MySQLdb package
-│   └── patient_prediction_engine.py <- Script to make a prediction for a single patient
+│   └── patient_prediction_engine.py <- Script to make a prediction for a single patient (contains the prediction model)
 │
 └── .gitignore         <- Indicates which files should never be uploaded to git
 ```

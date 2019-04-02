@@ -18,6 +18,7 @@ def get_icu_model():
     """Before every call, get an instance of the ICUModel."""
 
     g.icu_model_obj = ICUModel()
+    g.current_datetime = g.icu_model_obj.get_current_simulated_time()
 
 
 @app.teardown_appcontext
