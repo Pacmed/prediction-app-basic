@@ -13,15 +13,15 @@
   - Check whether it works
 
 
-4. Add the length of stay in hours to the `/get_prediction_for_single_patient` endpoint (\*\*).
+4. Return empty JSON on `/get_prediction_for_single_patient` when the patient left the IC (\*\*).
   - Only modify *api.py*.
-  - (TIP: `g.current_datetime` is available in all API endpoints.)
+  - (TIP: use the `datetime_discharge` attribute of a patient)
   - Verify your work
 
 
-5. Return empty JSON on `/get_prediction_for_single_patient` when the patient left the IC (\*\*).
+5. Add the length of stay in hours to the `/get_prediction_for_single_patient` endpoint (\*\*).
   - Only modify *api.py*.
-  - (TIP: use the `datetime_discharge` attribute of a patient)
+  - (TIP: `g.current_datetime` is available in all API endpoints.)
   - Verify your work
 
 
