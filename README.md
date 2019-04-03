@@ -19,6 +19,8 @@ This tool is optimised for educational purposes, do **not** use this in producti
 ├── setup.py           <- Makes this package installable
 ├── simulator.py       <- Simulator script that simulates daily life at the IC
 ├── src                <- Source code for use in this project.
+│   ├── templates      <- Folder with the templates for the application
+│   │   └── dashboard.html <- The template for the dashboard endpoint  
 │   ├── __init__.py    <- Makes src a Python module
 │   ├── api.py         <- Script with the Flask/API-code
 │   ├── config.py      <- Script with configuration
@@ -40,7 +42,9 @@ This tool is optimised for educational purposes, do **not** use this in producti
 - Run `docker-compose up -d` from the root of this repository
 - Make sure that four containers are running with `docker ps`
 - Check whether required services are accessible in the browser:
-  1. API:
-     - `localhost/get_patients_in_ic`
-     - `localhost/get_prediction_for_single_patient/{patient_id}`. Replace `{patient_id}` with a patient id to be found in the response of the first call.
-  2. Database Manager: ```localhost:8080``` with credentials *icu_username/icu_password*
+  1. Application:
+     - `localhost/dashboard`
+  2. API:
+     - `localhost/api/get_patients_in_ic`
+     - `localhost/api/get_prediction_for_single_patient/{patient_id}`. Replace `{patient_id}` with a patient id to be found in the response of the first call.
+  3. Database Manager: ```localhost:8080``` with credentials *icu_username/icu_password*

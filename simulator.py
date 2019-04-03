@@ -13,6 +13,7 @@ from numpy.random import normal
 from faker import Faker
 import coloredlogs
 from src.mysql_adapter import MySQL
+from sys import exit
 
 SECONDS_IN_MINUTE = 60
 MINUTES_IN_DAY = 1440
@@ -88,8 +89,8 @@ class Simulator:
         """Reset the simulation."""
 
         # Clean the database from previous simulations
-        self.mysql_obj.execute_query("DELETE FROM patients")
-        self.mysql_obj.execute_query("DELETE FROM patient_signal_values")
+        self.mysql_obj.execute_query("TRUNCATE patients")
+        self.mysql_obj.execute_query("TRUNCATE patient_signal_values")
 
     def possibly_admit_patient(self, always_admit=False):
         """Admit a fake patient."""
@@ -106,12 +107,15 @@ class Simulator:
             # list (a bed can only be assigned once)
             bed = self.available_beds.pop(randrange(len(self.available_beds)))
 
+            # Simulate a date of birthe for this patient
+            date_of_birth = self.faker_obj.date_of_birth()
+
             # Construct a fake patient
             patient = {
                 "first_name": self.faker_obj.first_name(),
                 "last_name": self.faker_obj.last_name(),
-                "date_of_birth": self.faker_obj.date_of_birth(),
-                "age": self.faker_obj.random_int(min=MIN_AGE, max=MAX_AGE),
+                "date_of_birth": date_of_birth,
+                "age": (self.current_datetime.date() - date_of_birth).days / 365,
                 "datetime_admission": self.current_datetime,
                 "bed": bed
             }

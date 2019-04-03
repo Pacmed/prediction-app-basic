@@ -5,7 +5,7 @@ Author: Bas Vonk
 Date: 2019-04-01
 """
 
-from flask import Flask, jsonify, request, g
+from flask import Flask, jsonify, request, g, render_template
 from src.patient_prediction_engine import PatientPredictionEngine
 from src.icu_model import ICUModel
 
@@ -28,7 +28,14 @@ def close_connection(error):
     del g.icu_model_obj
 
 
-@app.route('/get_patients_in_ic')
+@app.route('/dashboard')
+def dashboard():
+    """Render a dashboard in the browser."""
+
+    return render_template('dashboard.html', patients=g.icu_model_obj.get_patients_in_ic())
+
+
+@app.route('/api/get_patients_in_ic')
 def get_patients_in_ic():
     """Get all patients currently in the IC.
 
@@ -62,7 +69,7 @@ def get_patients_in_ic():
     return jsonify(response)
 
 
-@app.route('/get_prediction_for_single_patient/<int:patient_id>')
+@app.route('/api/get_prediction_for_single_patient/<int:patient_id>')
 def get_prediction_for_single_patient(patient_id):
     """Get a prediction for a single patient.
 
