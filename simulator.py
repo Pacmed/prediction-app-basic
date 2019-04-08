@@ -32,9 +32,6 @@ FREQ_MEASUREMENTS = MEASUREMENTS_PER_DAY_PER_SIGNAL / MINUTES_IN_DAY
 
 DATETIME_START = "2019-01-01 00:00:00"
 
-MIN_AGE = 10
-MAX_AGE = 100
-
 # A day takes 1440 (24 * 60) iterations/minutes. For a fake day to last 5 minutes, we need to sleep
 # 1 / 24 seconds for each iteration/minute
 SLOW_FACTOR = 1 / 24

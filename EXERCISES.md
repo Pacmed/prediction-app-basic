@@ -8,7 +8,7 @@
   - Check whether this indeed greatly influences the risk probability (\*).
 
 #### Play around with the API endpoints
-3. Add another API endpoint `/healtcheck` (\*\*).
+3. Add another API endpoint `/healthcheck` (\*\*).
   - Returns plain text `I'm healthy!` when called.
   - Check whether it works by visiting the endpoint in the browser.
 
