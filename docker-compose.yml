@@ -3,7 +3,7 @@ services:
 
   api:
     container_name: api
-    build: .
+    build: Dockerfile
     command: "python /www/src/api.py"
     ports:
       - 80:80
@@ -19,7 +19,7 @@ services:
 
   simulator:
     container_name: simulator
-    build: .
+    build: Dockerfile
     command: "python /www/simulator.py"
     volumes:
       - ./:/www/
@@ -45,7 +45,7 @@ services:
 
   # Interface for our own MySQL database
   phpmyadmin:
-    container_name: icu_phpmyadmin
+    container_name: database-manager
     image: phpmyadmin/phpmyadmin:4.8.5
     ports:
       - 8080:80

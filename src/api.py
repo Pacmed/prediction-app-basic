@@ -32,7 +32,9 @@ def close_connection(error):
 def dashboard():
     """Render a dashboard in the browser."""
 
-    return render_template('dashboard.html', patients=g.icu_model_obj.get_patients_in_ic())
+    return render_template('dashboard.html',
+                           patients=g.icu_model_obj.get_patients_in_ic(),
+                           current_datetime=g.current_datetime)
 
 
 @app.route('/api/get_patients_in_ic')

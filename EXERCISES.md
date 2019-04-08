@@ -24,30 +24,33 @@
   - (TIP: `g.current_datetime` is available in all API endpoints.)
   - Verify your work.
 
+6. Add the length of stay in hours to the `/dashboard` interface (\*\*\*).
+  - You need to modify multiple files.
+  - (TIP: `g.current_datetime` is available in all API endpoints.)
 
-6. Add another API endpoint `/get_predictions_for_all_patients` (\*\*\*).
+7. Add another API endpoint `/get_predictions_for_all_patients` (\*\*\*).
   - Return the JSON as in */get_patients_in_ic*, but add the risk probability for each patient.
 
 #### Add logging
-7. Add logging to API endpoints (\*\*\*).
+8. Add logging to API endpoints (\*\*\*).
   - For each API call (`get_patients_in_ic` and `get_prediction_for_single_patient`), log the JSON response. Look at *mysql_adapter.py* for examples.
   - Check your logging by running the command `docker logs -f api` from the terminal.
 
 
-8. Store all predictions in the database (\*\*\*).
+9. Store all predictions in the database (\*\*\*).
   - Add a table to the Pacmed database (TIP: use the database manager). This table should have columns for the patient_id, time and risk_probability.
   - Modify the __patient prediction engine__ to store predictions as well as returning them.
   - Make some API calls. Check whether predictions are indeed logged in the database.
 
 #### Extend the cluster with caching and logging in Elasticsearch
-9. Add caching to the application (\*\*\*\*).
+10. Add caching to the application (\*\*\*\*).
   - Add [Redis](https://docs.docker.com/compose/gettingstarted/) to the cluster.
   - Replace the *get_prediction* method with an *add_prediction_to_cache* method. Make sure this function adds the risk_probability to Redis.
   - Make the prediction engine loop continuously. Tip: don't forget to also loop over patients to avoid making predictions for one patient only.
   - Modify the `/get_prediction_for_single_patient` endpoint to get the risk predictions from the cache.
 
 
-10. Add external logging to the application (\*\*\*\*\*).
+11. Add external logging to the application (\*\*\*\*\*).
   - Add Elasticsearch and Kibana to the cluster.
   - Add logging to the API endpoints.
   - Configure Kibana.

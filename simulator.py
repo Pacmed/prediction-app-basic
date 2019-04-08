@@ -13,7 +13,6 @@ from numpy.random import normal
 from faker import Faker
 import coloredlogs
 from src.mysql_adapter import MySQL
-from sys import exit
 
 SECONDS_IN_MINUTE = 60
 MINUTES_IN_DAY = 1440
