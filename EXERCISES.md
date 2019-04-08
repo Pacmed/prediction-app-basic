@@ -1,6 +1,6 @@
 # ICU Prediction API: Exercises
 
-1. Make sure you understand the difference between the 'Model' as in [Model-View-Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) (*ic_model.py*) and the prediction model to avoid confusion. They carry the same name but are two entirely different concepts.
+1. Get familiarized with all the files in the repository. Make sure you understand the difference between the 'Model' as in [Model-View-Controller](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller) (*ic_model.py*) and the prediction model to avoid confusion. They carry the same name but are two entirely different concepts.
 
 #### Find the model
 2. Update the model (\*)
@@ -24,9 +24,11 @@
   - (TIP: `g.current_datetime` is available in all API endpoints.)
   - Verify your work.
 
+
 6. Add the length of stay in hours to the `/dashboard` interface (\*\*\*).
   - You need to modify multiple files.
   - (TIP: `g.current_datetime` is available in all API endpoints.)
+
 
 7. Add another API endpoint `/get_predictions_for_all_patients` (\*\*\*).
   - Return the JSON as in */get_patients_in_ic*, but add the risk probability for each patient.

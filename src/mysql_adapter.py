@@ -16,6 +16,7 @@ MAX_RETRIES = 10
 LOGGER = logging.getLogger('MySQL adapter')
 coloredlogs.install(logger=LOGGER)
 
+
 class MySQL:
     """MysQL adapter.
 
