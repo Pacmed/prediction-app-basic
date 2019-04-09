@@ -5,10 +5,11 @@
 #### Find the model
 2. Update the model (\*)
   - Update `x_beta` to be `-5 + 0.01 * age + 0.001 * blood_pressure__last + 0.03 * respiration_rate__mean + 0.02 * temperature_std` in the application.
-  - Check whether this indeed greatly influences the risk probability (\*).
+  - Check whether this indeed greatly influences the risk probability by visiting  /get_prediction_for_single_patient (\*).
 
 #### Play around with the API endpoints
 3. Add another API endpoint `/healthcheck` (\*\*).
+  - (TIP: use the api.py file)
   - Returns plain text `I'm healthy!` when called.
   - Check whether it works by visiting the endpoint in the browser.
 
@@ -43,6 +44,7 @@
   - Add a table to the Pacmed database (TIP: use the database manager). This table should have columns for the patient_id, time and risk_probability.
   - Modify the __patient prediction engine__ to store predictions as well as returning them.
   - Make some API calls. Check whether predictions are indeed logged in the database.
+  - (TIP: Use replace_into of the mysql_adapter)
 
 #### Extend the cluster with caching and logging in Elasticsearch
 10. Add caching to the application (\*\*\*\*).
