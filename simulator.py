@@ -178,6 +178,7 @@ class Simulator:
                         'value': normal(signal['population_mean'], signal['population_std'])
                     }
 
+                    LOGGER.info(f"{signal['name']} with value {row['value']} registered for {patient['first_name']}.")
                     self.mysql_obj.replace_into(table_name='patient_signal_values', values=row)
 
     def next_minute(self):
