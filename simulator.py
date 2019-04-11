@@ -70,7 +70,7 @@ class Simulator:
     def __init__(self):
 
         # Create necessary connections and objects
-        self.mysql_obj = MySQL()
+        self.mysql_obj: MySQL = MySQL()
         self.faker_obj = Faker('nl_NL')
         self.current_datetime = datetime.strptime(DATETIME_START, DATETIME_FORMAT)
         self.available_beds = AVAILABLE_BEDS
