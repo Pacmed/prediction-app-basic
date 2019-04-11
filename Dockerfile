@@ -9,3 +9,6 @@ COPY . /www
 # Upgrade pip and install the required packages
 RUN pip install pip==19.0.3
 RUN pip install -e .
+
+# Cleanup stuff that was only required for installation
+RUN rm -rf /www/*
