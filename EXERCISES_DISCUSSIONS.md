@@ -17,10 +17,10 @@ Exercises:
   - Advanced insights
 
 
-3. Congratulations, you have now defined some basic *requirements* for your software! Take (20 mins) to construct some [wireframes](https://www.experienceux.co.uk/faqs/what-is-wireframing/) that meet most (not necessarily all of them) requirements.
+3. Congratulations, you have now defined some basic *requirements* for your software! Take (20 mins) to construct some [wireframes](https://www.experienceux.co.uk/faqs/what-is-wireframing/) that meet most (not necessarily all) requirements.
 
 
-4. Take (10 mins) to think about practicalities regarding your software product.
+4. Take (10 mins) to think about practicalities regarding your software product. What sort of data is required? Is this data required in real-time or is a delay acceptable? What do you think about the feasibility of your solutions?
 
 
 5. As a final exercise, take some time (10 mins) to think about roles in your organisation. Do you know who is responsible for what? Who is in charge of the database? Who grants rights regarding those databases
