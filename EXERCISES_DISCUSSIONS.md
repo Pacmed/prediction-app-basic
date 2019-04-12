@@ -8,7 +8,7 @@ Goals:
 
 Exercises:
 
-1. Briefly investigate what sort of data is available in your organisation (5 mins). Also think of data that might be available, but is not properly stored/recorded yet.
+1. Briefly investigate what sort of data is available in your organisation or the organisations you work for (5 mins). Also think of data that might be available, but is not properly stored/recorded yet.
 
 
 2. Brainstorm on how data might add value to everyday life in your organisation. Try to come up with properly formulated [user stories](https://www.mountaingoatsoftware.com/agile/user-stories) ("As a < type of user >, I want < some goal > so that < some reason >."). Try to be come as concrete as possible! (30 mins) Suggestions are:
