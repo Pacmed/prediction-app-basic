@@ -1,0 +1,3 @@
+FROM mysql:5.7.25
+
+ADD ./data/db_structure/db_structure.sql /docker-entrypoint-initdb.d

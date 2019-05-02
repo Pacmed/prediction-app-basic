@@ -112,5 +112,12 @@ def get_prediction_for_single_patient(patient_id):
     return jsonify(response)
 
 
+@app.route('/')
+def healthcheck():
+    """Healtcheck"""
+
+    return 'Healthy!'
+
+
 if __name__ == "__main__":  # pragma: no cover
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=5000)
