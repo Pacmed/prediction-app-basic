@@ -1,3 +1,0 @@
-Name    Stmts   Miss  Cover   Missing
--------------------------------------
-No data to report.
