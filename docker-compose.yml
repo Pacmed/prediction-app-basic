@@ -1,14 +1,12 @@
-version: "3.4"
+version: "3.3"
 services:
 
   api:
-    container_name: api
-    build: .
-    command: "python /www/src/api.py"
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     ports:
-      - 80:80
-    volumes:
-      - ./:/www/
+      - 5000:5000
     environment:
       MYSQL_HOSTNAME: database
       MYSQL_USERNAME: icu_username
@@ -18,11 +16,9 @@ services:
       - database
 
   simulator:
-    container_name: simulator
-    build: .
-    command: "python /www/simulator.py"
-    volumes:
-      - ./:/www/
+    build:
+      context: .
+      dockerfile: Dockerfile.simulator
     environment:
       MYSQL_HOSTNAME: database
       MYSQL_USERNAME: icu_username
@@ -32,20 +28,17 @@ services:
       - database
 
   database:
-    container_name: database
-    image: mysql:5.7.25
+    build:
+      context: .
+      dockerfile: Dockerfile.database
     environment:
       MYSQL_USER: icu_username
       MYSQL_PASSWORD: icu_password
       MYSQL_ROOT_PASSWORD: icu_rootpass
       MYSQL_DATABASE: icu_database
-    volumes:
-      - ./data/db_structure:/docker-entrypoint-initdb.d
-      - ./data/db_data:/var/lib/mysql
 
   # Interface for our own MySQL database
-  phpmyadmin:
-    container_name: database-manager
+  database-manager:
     image: phpmyadmin/phpmyadmin:4.8.5
     ports:
       - 8080:80

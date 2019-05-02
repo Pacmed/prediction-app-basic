@@ -10,5 +10,4 @@ COPY . /www
 RUN pip install pip==19.0.3
 RUN pip install -e .
 
-# Cleanup stuff that was only required for installation
-RUN rm -rf /www/*
+CMD ["python", "/www/src/api.py"]
