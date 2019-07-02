@@ -7,11 +7,18 @@ Date: 2019-04-01
 """
 
 from flask import Flask, jsonify, request, g, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_oauthlib.provider import OAuth2Provider
 from src.patient_prediction_engine import PatientPredictionEngine
 from src.icu_model import ICUModel
 
 # Initialize the app and define the folder with the builds and static files
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://icu_username:icu_password@database/auth_database'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['OAUTH2_PROVIDER_TOKEN_EXPIRES_IN'] = 3600
+alchemyDB = SQLAlchemy(app)
+oauth2_provider = OAuth2Provider(app)
 
 
 @app.before_request

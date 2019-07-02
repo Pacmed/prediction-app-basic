@@ -9,10 +9,12 @@ setup(
     license='',
     install_requires=[
         'mysqlclient==1.4.2',
-        'flask==1.0.2',
         'faker==1.0.4',
         'numpy==1.16.2',
         'pandas==0.24.2',
-        'coloredlogs==10.0'
+        'coloredlogs==10.0',
+        'flask==1.0.2',
+        'Flask-OAuthlib',
+        'Flask-SQLAlchemy'
     ]
 )
