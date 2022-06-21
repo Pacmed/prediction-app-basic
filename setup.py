@@ -11,7 +11,7 @@ setup(
         'mysqlclient==1.4.2',
         'flask==1.0.2',
         'faker==1.0.4',
-        'numpy==1.16.2',
+        'numpy==1.22.0',
         'pandas==0.24.2',
         'coloredlogs==10.0'
     ]
