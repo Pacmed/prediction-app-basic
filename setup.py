@@ -9,7 +9,7 @@ setup(
     license='',
     install_requires=[
         'mysqlclient==1.4.2',
-        'flask==1.0.2',
+        'flask==2.3.2',
         'faker==1.0.4',
         'numpy==1.16.2',
         'pandas==0.24.2',
